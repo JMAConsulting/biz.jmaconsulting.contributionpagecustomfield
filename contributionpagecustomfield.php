@@ -85,6 +85,20 @@ function contributionpagecustomfield_civicrm_upgrade($op, CRM_Queue_Queue $queue
  */
 function contributionpagecustomfield_civicrm_managed(&$entities) {
   _contributionpagecustomfield_civix_civicrm_managed($entities);
+  $entities[] = [
+    'module' => 'biz.jmaconsulting.contributionpagecustomfield',
+    'name' => 'contributionpagecustomfield',
+    'update' => 'never',
+    'entity' => 'OptionValue',
+    'params' => [
+      'label' => ts('Contribution Page'),
+      'name' => 'civicrm_contribution_page',
+      'value' => 'ContributionPage',
+      'option_group_id' => 'cg_extend_objects',
+      'is_active' => 1,
+      'version' => 3,
+    ],
+  ];
 }
 
 /**
@@ -152,24 +166,12 @@ function contributionpagecustomfield_civicrm_preProcess($formName, &$form) {
  *
  */
 function contributionpagecustomfield_civicrm_postProcess($formName, &$form) {
-  if ($formName == 'CRM_Contribute_Form_ContributionPage_Settings' && ($id = $form->getVar('_id'))) {
-    $customValues = CRM_Core_BAO_CustomField::postProcess($form->_submitValues, $id, 'ContributionPage');
+  if ($formName == 'CRM_Contribute_Form_ContributionPage_Settings') {
+    $id = $form->get('id');
+    $params = $form->_submitValues;
+    $customValues = CRM_Core_BAO_CustomField::postProcess($params, $id, 'ContributionPage');
     if (!empty($customValues) && is_array($customValues)) {
       CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_contribution_page', $id);
     }
-  }
-}
-
-/**
- * Implements hook_civicrm_buildForm().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
- *
- */
-function contributionpagecustomfield_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Contribute_Form_ContributionPage_Settings') {
-    CRM_Core_Region::instance('contribute-form-contributionpage-settings-main')->add(array(
-      'template' => __DIR__ . '/templates/CRM/Form/ContributionPageCustom.tpl',
-    ));
   }
 }
