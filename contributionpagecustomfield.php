@@ -169,9 +169,29 @@ function contributionpagecustomfield_civicrm_postProcess($formName, &$form) {
   if ($formName == 'CRM_Contribute_Form_ContributionPage_Settings') {
     $id = $form->get('id');
     $params = $form->_submitValues;
-    $customValues = CRM_Core_BAO_CustomField::postProcess($params, $id, 'ContributionPage');
-    if (!empty($customValues) && is_array($customValues)) {
-      CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_contribution_page', $id);
-    }
+    contributionpagecustomfield_storeCustomField($params, $id);
+  }
+}
+
+/**
+ * Implements hook_civicrm_apiWrappers().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_apiWrappers
+ *
+ */
+function contributionpagecustomfield_civicrm_apiWrappers(&$wrappers, $apiRequest) {
+  if ($apiRequest['entity'] == 'ContributionPage' && $apiRequest['action'] == 'create') {
+    $wrappers[] = new CRM_Contributionpagecustomfield_APIWrapper();
+  }
+}
+
+/**
+ * Function to process custom fields for contribution page.
+ *
+ */
+function contributionpagecustomfield_storeCustomField($params, $id) {
+  $customValues = CRM_Core_BAO_CustomField::postProcess($params, $id, 'ContributionPage');
+  if (!empty($customValues) && is_array($customValues)) {
+    CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_contribution_page', $id);
   }
 }
