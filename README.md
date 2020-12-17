@@ -4,7 +4,7 @@
 
 ## Overview
 
-This extension allows to create custom field for a contribution page.
+This extension enables creating custom fields for a contribution page.
 
 ## Installation
 
