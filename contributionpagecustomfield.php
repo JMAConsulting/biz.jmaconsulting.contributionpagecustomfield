@@ -150,12 +150,6 @@ function contributionpagecustomfield_civicrm_preProcess($formName, &$form) {
     if ($id) {
       $form->assign('entityID', $id);
     }
-    if (!empty($_POST['hidden_custom'])) {
-      $form->set('type', 'ContributionPage');
-      CRM_Custom_Form_CustomData::preProcess($form, NULL, NULL, 1, 'ContributionPage', $id);
-      CRM_Custom_Form_CustomData::buildQuickForm($form);
-      CRM_Custom_Form_CustomData::setDefaultValues($form);
-    }
   }
 }
 
@@ -170,18 +164,6 @@ function contributionpagecustomfield_civicrm_postProcess($formName, &$form) {
     $id = $form->get('id');
     $params = $form->_submitValues;
     contributionpagecustomfield_storeCustomField($params, $id);
-  }
-}
-
-/**
- * Implements hook_civicrm_apiWrappers().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_apiWrappers
- *
- */
-function contributionpagecustomfield_civicrm_apiWrappers(&$wrappers, $apiRequest) {
-  if ($apiRequest['entity'] == 'ContributionPage' && $apiRequest['action'] == 'create') {
-    $wrappers[] = new CRM_Contributionpagecustomfield_APIWrapper();
   }
 }
 
