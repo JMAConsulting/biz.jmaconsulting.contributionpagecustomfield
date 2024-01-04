@@ -18,10 +18,17 @@
   <version>1.0</version>
   <develStage>beta</develStage>
   <compatibility>
-    <ver>4.7</ver>
+    <ver>5.27</ver>
   </compatibility>
   <comments>Many thanks to EHC(Environmental Health Coalition) for sponsoring the development of this extension.</comments>
   <civix>
     <namespace>CRM/Contributionpagecustomfield</namespace>
+    <format>23.02.1</format>
   </civix>
+  <mixins>
+    <mixin>smarty-v2@1.0.1</mixin>
+  </mixins>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
 </extension>
